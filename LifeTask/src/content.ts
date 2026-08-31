@@ -29,7 +29,7 @@ export const content = {
   },
 
   scene3: {
-    question: 'Cho phép anh làm người yêu anh nhé ?',
+    question: 'Cho phép anh làm người yêu em nhé ?',
     yes: 'Đồng ý',
     no: 'Không',
   },
