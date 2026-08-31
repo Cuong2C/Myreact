@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { content } from '../content'
+import { cssVars } from '../cssVars'
 
 const HEART =
   'M 150 88 C 150 88 132 52 98 48 C 52 42 28 86 48 128 C 72 176 150 236 150 236 C 150 236 228 176 252 128 C 272 86 248 42 202 48 C 168 52 150 88 150 88'
@@ -90,7 +91,7 @@ export function FairyHeart({ active }: FairyHeartProps) {
     <div className="fairy-layer" aria-hidden="true">
       <div
         className={`fairy-scene${beating ? ' is-beating' : ''}`}
-        style={{ '--draw-ms': `${content.timings.heartDrawMs}ms` }}
+        style={cssVars({ '--draw-ms': `${content.timings.heartDrawMs}ms` })}
       >
         <svg className="heart-svg" viewBox="0 0 300 260">
           <defs>
@@ -110,7 +111,7 @@ export function FairyHeart({ active }: FairyHeartProps) {
                 cx={dot.x}
                 cy={dot.y}
                 r={dot.size}
-                style={{ '--t': String(dot.t) }}
+                style={cssVars({ '--t': String(dot.t) })}
               />
             ))}
           </g>

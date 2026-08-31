@@ -3,6 +3,7 @@ import { FairyHeart } from './components/FairyHeart'
 import { StarrySky } from './components/StarrySky'
 import { TypeLine } from './components/TypeLine'
 import { content } from './content'
+import { cssVars } from './cssVars'
 import './App.css'
 
 type Phase = 'intro' | 'left' | 'reveal' | 'story' | 'celebrate'
@@ -127,7 +128,7 @@ function App() {
       <main className="stage-main">
         <div
           className={`ask${showIntro ? ' is-visible' : ''}`}
-          style={{ '--ask-fade': `${content.timings.introFadeMs}ms` }}
+          style={cssVars({ '--ask-fade': `${content.timings.introFadeMs}ms` })}
           inert={!showIntro}
         >
           <p className="ask-q">{content.scene1.question}</p>
@@ -155,7 +156,7 @@ function App() {
 
           <div
             className={`ask ask-follow${showAsk3 ? ' is-visible' : ''}`}
-            style={{ '--ask-fade': `${content.timings.questionFadeMs}ms` }}
+            style={cssVars({ '--ask-fade': `${content.timings.questionFadeMs}ms` })}
             inert={!showAsk3}
           >
             <p className="ask-q ask-q-sm">{content.scene3.question}</p>
