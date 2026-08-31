@@ -1,0 +1,393 @@
+.stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #000;
+}
+
+.sky,
+.sky-photo,
+.sky-wash,
+.stars {
+  position: absolute;
+  inset: 0;
+}
+
+.sky {
+  opacity: 0;
+  transform: rotate(-22deg) scale(1.4);
+  transform-origin: 50% 60%;
+  transition:
+    opacity 3.2s ease,
+    transform 3.2s cubic-bezier(0.22, 0.8, 0.28, 1);
+  pointer-events: none;
+}
+
+.stage.is-ready .sky {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.sky-photo {
+  background-color: #02040a;
+  background-position: center;
+  background-size: cover;
+  filter: saturate(0.85) brightness(0.72);
+  transform: scale(1.06);
+}
+
+.sky-wash {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 115%, #0a1024 0%, transparent 55%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+  animation-name: twinkle;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.moon-track {
+  position: absolute;
+  inset: 8% 0 auto;
+  height: 38%;
+  animation: moon-path 48s linear infinite;
+}
+
+.moon {
+  width: min(14vw, 72px);
+  height: min(14vw, 72px);
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 30%, #fff6d8 0%, #e8d9a4 38%, #c9b56a 100%);
+  box-shadow:
+    0 0 24px rgba(255, 236, 180, 0.45),
+    0 0 60px rgba(255, 220, 140, 0.18);
+}
+
+.moon::after {
+  content: '';
+  position: absolute;
+  inset: 18% 42% auto auto;
+  width: 22%;
+  height: 22%;
+  border-radius: 50%;
+  background: rgba(180, 160, 90, 0.28);
+}
+
+.stage-main {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: max(24px, env(safe-area-inset-top))
+    max(20px, env(safe-area-inset-right))
+    max(28px, env(safe-area-inset-bottom))
+    max(20px, env(safe-area-inset-left));
+}
+
+.stage-main > .ask,
+.stage-main > .story {
+  grid-area: 1 / 1;
+}
+
+.ask {
+  --ask-fade: 800ms;
+  width: min(100%, 34rem);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--ask-fade) ease,
+    visibility 0s linear var(--ask-fade);
+}
+
+.ask.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity var(--ask-fade) ease,
+    visibility 0s;
+}
+
+.ask-q {
+  margin: 0 0 1.6rem;
+  font-size: clamp(1.35rem, 6.4vw, 2rem);
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.ask-q-sm {
+  margin-bottom: 1.15rem;
+  font-size: clamp(1.15rem, 5.4vw, 1.55rem);
+}
+
+.story {
+  width: min(100%, 34rem);
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+}
+
+.story.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.6s ease, visibility 0s;
+}
+
+.story-line {
+  min-height: 2.4em;
+  margin: 0 0 1.4rem;
+  font-size: clamp(1.2rem, 5.8vw, 1.7rem);
+  line-height: 1.5;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-left: 0.08em;
+  background: #fff8e7;
+  animation: blink 0.9s step-end infinite;
+  vertical-align: -0.08em;
+}
+
+.ask-follow {
+  width: 100%;
+}
+
+.ask-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ask-btn {
+  min-width: 7.5rem;
+  min-height: 48px;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid rgba(255, 246, 216, 0.35);
+  border-radius: 999px;
+  color: #fff8e7;
+  background: rgba(8, 10, 18, 0.42);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.ask-btn:hover,
+.ask-btn:focus-visible {
+  background: rgba(255, 246, 216, 0.12);
+  border-color: rgba(255, 246, 216, 0.7);
+  outline: none;
+}
+
+.ask-btn:active {
+  transform: scale(0.97);
+}
+
+.ask-btn.is-fleeing {
+  position: fixed;
+  z-index: 5;
+  width: auto;
+  min-width: 7.5rem;
+  margin: 0;
+  transition: left 0.18s ease, top 0.18s ease, background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.ask-btn-slot {
+  min-width: 7.5rem;
+  min-height: 48px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes moon-path {
+  0% {
+    transform: translate3d(-18vw, 18%, 0);
+  }
+  50% {
+    transform: translate3d(42vw, -8%, 0);
+  }
+  100% {
+    transform: translate3d(108vw, 22%, 0);
+  }
+}
+
+@media (max-width: 360px) {
+  .ask-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ask-btn {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .ask-btn.is-fleeing {
+    width: auto;
+    min-width: 7.5rem;
+  }
+
+  .ask-btn-slot {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 720px) {
+  .ask-actions {
+    gap: 20px;
+  }
+
+  .ask-btn {
+    min-width: 8.5rem;
+  }
+}
+
+.fairy-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.fairy-scene {
+  --draw-ms: 3600ms;
+  position: relative;
+  width: min(86vw, 360px);
+  height: min(76vw, 310px);
+}
+
+.fairy-scene.is-beating {
+  animation: heart-beat 1.05s ease-in-out infinite;
+}
+
+.heart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.heart-dot {
+  --t: 0;
+  fill: #ff3b4a;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spark-in 520ms ease-out forwards;
+  animation-delay: calc(var(--t) * var(--draw-ms));
+}
+
+.fairy-scene.is-beating .heart-dot {
+  animation: heart-twinkle 1.05s ease-in-out infinite;
+  animation-delay: calc(var(--t) * 0.55s);
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes spark-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.55);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(1);
+  }
+}
+
+@keyframes heart-twinkle {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes heart-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.09);
+  }
+  28% {
+    transform: scale(0.97);
+  }
+  42% {
+    transform: scale(1.07);
+  }
+  58% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sky,
+  .ask,
+  .ask-btn,
+  .story {
+    transition: none;
+  }
+
+  .star,
+  .moon-track,
+  .caret,
+  .heart-dot,
+  .fairy-scene.is-beating {
+    animation: none;
+  }
+
+  .stage.is-ready .sky {
+    transform: none;
+  }
+}
